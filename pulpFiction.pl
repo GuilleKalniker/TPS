@@ -77,3 +77,88 @@ tieneCerca(Personaje,OtroPersonaje):-
 sanCayetano(Personaje):-
  personaje(Personaje, _),
  forall(tieneCerca(Personaje,OtroPersonaje),encargo(Personaje,OtroPersonaje,_)).
+                    % VERLO NO ME DEVUELVE LA GENTE CORRECTA %
+
+% 5
+cantidadTareas(Personaje,Total):-
+    personaje(Personaje, _),
+    findall(Tarea,encargo(_, Personaje,Tarea),Tareas),
+    length(Tareas,Total).
+
+masAtareado(Personaje):-
+    cantidadTareas(Personaje,Total),
+    cantidadTareas(OtroPersonaje,_),
+    OtroPersonaje \= Personaje,
+    forall(cantidadTareas(OtroPersonaje,Total2), Total2 < Total).
+
+
+% 6
+
+respeto(actriz(Peliculas),Respeto):-
+    length(Peliculas,Cantidad),
+    Respeto is Cantidad // 10.
+respeto(mafioso(resuelveProblemas),10).
+respeto(mafioso(maton),1).
+respeto(mafioso(capo),20).
+
+personajeRespetable(Personaje):-
+    personaje(Personaje, Tarea),
+    respeto(Tarea,PuntosDeRespeto),
+    PuntosDeRespeto > 9.
+
+personajesRespetables(ListaRespetados):-
+    findall(Respetado,personajeRespetable(Respetado),ListaRespetados).
+
+% 7
+/* interactuaCon(Personaje,OtroPersonaje,cuidar(OtroPersonaje)):-
+    personaje(Personaje, _),
+    personaje(OtroPersonaje, _),
+    encargo(_, Personaje,cuidar(OtroPersonaje)).
+interactuaCon(Personaje,OtroPersonaje,ayudar(OtroPersonaje)):-
+    personaje(Personaje, _),
+    personaje(OtroPersonaje, _),
+    encargo(_, Personaje,ayudar(OtroPersonaje)).
+interactuaCon(Personaje,OtroPersonaje,buscar(OtroPersonaje,_)):-
+    personaje(Personaje, _),
+    personaje(OtroPersonaje, _),
+    encargo(_, Personaje,buscar(OtroPersonaje,_)).
+
+hartoDe(Personaje,OtroPersonaje):-
+    personaje(Personaje, _),
+    personaje(OtroPersonaje, _),
+    Personaje \= OtroPersonaje,
+    forall(encargo(_,Personaje,Tarea),interactuaCon(Personaje,OtroPersonaje,Tarea)).
+hartoDe(Personaje,OtroPersonaje):-
+    personaje(Personaje, _),
+    personaje(OtroPersonaje, _),
+    personaje(Otro, _),
+    amigo(Otro,OtroPersonaje),
+    Personaje \= OtroPersonaje,
+    Otro \= OtroPersonaje, 
+    Otro \= Personaje,
+    forall(encargo(_,Personaje,Tarea),interactuaCon(Personaje,Otro,Tarea)). */
+       
+
+% 8
+caracteristicas(vincent,[negro, muchoPelo, tieneCabeza]).
+caracteristicas(jules,  [tieneCabeza, muchoPelo]).
+caracteristicas(marvin, [negro]).
+
+caracteristicaDiferente(Lista1,Lista2):-
+    nth1(_,Lista1,Caracteristica),
+    not(member(Caracteristica,Lista2)).
+
+duoDiferenciable(Personaje,OtroPersonaje):-
+    personaje(Personaje, _),
+    personaje(OtroPersonaje, _),
+    amigo(Personaje,OtroPersonaje),
+    caracteristicas(Personaje,Lista1),
+    caracteristicas(OtroPersonaje,Lista2),
+    caracteristicaDiferente(Lista1,Lista2).
+duoDiferenciable(Personaje,OtroPersonaje):-
+    personaje(Personaje, _),
+    personaje(OtroPersonaje, _),
+    pareja(Personaje,OtroPersonaje),
+    caracteristicas(Personaje,Lista1),
+    caracteristicas(OtroPersonaje,Lista2),
+    caracteristicaDiferente(Lista1,Lista2).
