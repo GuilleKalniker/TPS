@@ -28,8 +28,6 @@ encargo(marsellus, winston, ayudar(jules)).
 encargo(marsellus, winston, ayudar(vincent)).
 encargo(marsellus, vincent, buscar(butch, losAngeles)).
 
-
-
 % 1
 
 esPeligroso(Personaje):-
@@ -42,17 +40,16 @@ esPeligroso(Personaje):-
   esPeligroso(Empleado).
 
 % 2
-duoPeligroso(Personaje,OtroPersonaje):-
-    esPeligroso(Personaje),
-    esPeligroso(OtroPersonaje),
-    Personaje \= OtroPersonaje.
+duo(Personaje,OtroPersonaje):-
+    pareja(Personaje, OtroPersonaje).
+duo(Personaje,OtroPersonaje):-
+    amigo(Personaje, OtroPersonaje).
 
 duoTemible(Personaje,OtroPersonaje):-
- duoPeligroso(Personaje,OtroPersonaje),
- amigo(Personaje, OtroPersonaje).
-duoTemible(Personaje,OtroPersonaje):-
-    duoPeligroso(Personaje,OtroPersonaje),
-    pareja(Personaje, OtroPersonaje).
+ esPeligroso(Personaje),
+ esPeligroso(OtroPersonaje),
+ Personaje \= OtroPersonaje,
+ duo(Personaje,OtroPersonaje).
 
 % 3
 personajeConJefePeligroso(Personaje,Jefe):-
@@ -76,8 +73,9 @@ tieneCerca(Personaje,OtroPersonaje):-
 
 sanCayetano(Personaje):-
  personaje(Personaje, _),
+ tieneCerca(Personaje,_),
  forall(tieneCerca(Personaje,OtroPersonaje),encargo(Personaje,OtroPersonaje,_)).
-                    % VERLO NO ME DEVUELVE LA GENTE CORRECTA %
+                
 
 % 5
 cantidadTareas(Personaje,Total):-
@@ -87,10 +85,7 @@ cantidadTareas(Personaje,Total):-
 
 masAtareado(Personaje):-
     cantidadTareas(Personaje,Total),
-    cantidadTareas(OtroPersonaje,_),
-    OtroPersonaje \= Personaje,
-    forall(cantidadTareas(OtroPersonaje,Total2), Total2 < Total).
-
+    forall((cantidadTareas(OtroPersonaje,Total2),OtroPersonaje \= Personaje), Total2 =< Total).
 
 % 6
 
@@ -110,34 +105,22 @@ personajesRespetables(ListaRespetados):-
     findall(Respetado,personajeRespetable(Respetado),ListaRespetados).
 
 % 7
-/* interactuaCon(Personaje,OtroPersonaje,cuidar(OtroPersonaje)):-
-    personaje(Personaje, _),
-    personaje(OtroPersonaje, _),
-    encargo(_, Personaje,cuidar(OtroPersonaje)).
-interactuaCon(Personaje,OtroPersonaje,ayudar(OtroPersonaje)):-
-    personaje(Personaje, _),
-    personaje(OtroPersonaje, _),
-    encargo(_, Personaje,ayudar(OtroPersonaje)).
-interactuaCon(Personaje,OtroPersonaje,buscar(OtroPersonaje,_)):-
-    personaje(Personaje, _),
-    personaje(OtroPersonaje, _),
-    encargo(_, Personaje,buscar(OtroPersonaje,_)).
+interactuan(Personaje,cuidar(Personaje)).
+interactuan(Personaje,ayudar(Personaje)).
+interactuan(Personaje,buscar(Personaje,_)).  
+interactuan(Personaje,cuidar(Amigo)):-
+    amigo(Personaje,Amigo).
+interactuan(Personaje,ayudar(Amigo)):-
+    amigo(Personaje,Amigo).
+interactuan(Personaje,buscar(Amigo,_)):-
+    amigo(Personaje,Amigo).
 
 hartoDe(Personaje,OtroPersonaje):-
     personaje(Personaje, _),
     personaje(OtroPersonaje, _),
     Personaje \= OtroPersonaje,
-    forall(encargo(_,Personaje,Tarea),interactuaCon(Personaje,OtroPersonaje,Tarea)).
-hartoDe(Personaje,OtroPersonaje):-
-    personaje(Personaje, _),
-    personaje(OtroPersonaje, _),
-    personaje(Otro, _),
-    amigo(Otro,OtroPersonaje),
-    Personaje \= OtroPersonaje,
-    Otro \= OtroPersonaje, 
-    Otro \= Personaje,
-    forall(encargo(_,Personaje,Tarea),interactuaCon(Personaje,Otro,Tarea)). */
-       
+    encargo(_,Personaje,_),
+    forall(encargo(_,Personaje,Tarea),interactuan(OtroPersonaje,Tarea)).
 
 % 8
 caracteristicas(vincent,[negro, muchoPelo, tieneCabeza]).
@@ -151,14 +134,7 @@ caracteristicaDiferente(Lista1,Lista2):-
 duoDiferenciable(Personaje,OtroPersonaje):-
     personaje(Personaje, _),
     personaje(OtroPersonaje, _),
-    amigo(Personaje,OtroPersonaje),
-    caracteristicas(Personaje,Lista1),
-    caracteristicas(OtroPersonaje,Lista2),
-    caracteristicaDiferente(Lista1,Lista2).
-duoDiferenciable(Personaje,OtroPersonaje):-
-    personaje(Personaje, _),
-    personaje(OtroPersonaje, _),
-    pareja(Personaje,OtroPersonaje),
+    duo(Personaje,OtroPersonaje),
     caracteristicas(Personaje,Lista1),
     caracteristicas(OtroPersonaje,Lista2),
     caracteristicaDiferente(Lista1,Lista2).

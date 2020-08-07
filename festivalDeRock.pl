@@ -39,6 +39,20 @@ plusZona(granRex, zona1, 45).
 plusZona(granRex, zona2, 30).
 plusZona(aerodromo, zona1, 25).
 
+entrada(plateaNumerada(1)).
+entrada(plateaNumerada(2)).
+entrada(plateaNumerada(3)).
+entrada(plateaNumerada(4)).
+entrada(plateaNumerada(5)).
+entrada(plateaNumerada(6)).
+entrada(plateaNumerada(7)).
+entrada(plateaNumerada(8)).
+entrada(plateaNumerada(9)).
+entrada(plateaNumerada(10)).
+entrada(plateaGeneral(zona1)).
+entrada(plateaGeneral(zona2)).
+entrada(campo).
+
 % 1
 
 estaDeModa(Banda):-
@@ -73,10 +87,12 @@ precio(Festival,campo,Precio):-
     festival(Festival, _, _, Precio).
 precio(Festival,plateaNumerada(Fila),Precio):-
     festival(Festival, _, _, PrecioBase),
-    Precio is PrecioBase + (200 / Fila).
+    entrada(plateaNumerada(Fila)),
+    Precio is PrecioBase + (200 // Fila).
 precio(Festival,plateaGeneral(Zona),Precio):-
-    festival(Festival, _, _, PrecioBase),
-    plusZona(_, Zona, Plus),
+    festival(Festival, lugar(Lugar,_), _, PrecioBase),
+    entrada(plateaGeneral(Zona)),
+    plusZona(Lugar, Zona, Plus),
     Precio is PrecioBase + Plus.
 
 popularidadFestival(Festival,PopularidadTotal):-
@@ -92,7 +108,7 @@ entradaRazonable(Festival,plateaGeneral(Zona)):-
     festival(Festival, lugar(Lugar, _), _, _),
     precio(Festival,plateaGeneral(Zona),Precio),
     plusZona(Lugar, Zona, Plus),
-    Plus < (Precio * 10 / 100).   
+    Plus < (Precio * 10 // 100).   
 entradaRazonable(Festival,campo):-
   precio(Festival,campo, Precio),
   popularidadFestival(Festival,Popularidad),
@@ -105,7 +121,7 @@ entradaRazonable(Festival,plateaNumerada(Fila)):-
     precio(Festival,plateaNumerada(Fila),Precio),
     festival(Festival, lugar(_,Capacidad), _, _),
     popularidadFestival(Festival,Popularidad),
-    Limite is Capacidad / Popularidad,
+    Limite is Capacidad // Popularidad,
     Precio < Limite.
  
 %  4
