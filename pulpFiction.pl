@@ -128,7 +128,7 @@ caracteristicas(jules,  [tieneCabeza, muchoPelo]).
 caracteristicas(marvin, [negro]).
 
 caracteristicaDiferente(Lista1,Lista2):-
-    nth1(_,Lista1,Caracteristica),
+    member(Lista1,Caracteristica),
     not(member(Caracteristica,Lista2)).
 
 duoDiferenciable(Personaje,OtroPersonaje):-
