@@ -59,9 +59,26 @@ suenioPuro(serCantante(Cantidad)):-
     Cantidad < 200000.
 
 /* Me devuelve que Juan tiene quimica con mago de Oz y creo que tiene sentido pero no lo pone
-dentro de las soluciones. Tambien me parece raro lo del findall porque no veo como lo podes
-usar en este ej y tengo miedo de que en realidad sea un forall pero bueno, como no lo dice hago
-como que no se confundio */
+dentro de las soluciones. Creo que suenioPuro tiene que ser inversible pero no estaria seguro */
 
 % 4
 
+amigo(campanita,reyesMagos).
+amigo(campanita,conejoDePascua).
+amigo(conejoDePascua,cavenaghi).
+
+enfermo(campanita).
+enfermo(reyesMagos).
+enfermo(conejoDePascua).
+
+personajePuedeAlegrar(Personaje,Persona):-
+    persona(Persona),
+    personaje(Personaje),
+    suenio(Persona,_),
+    hayQuimica(Personaje,Persona),
+    not(cercanoEnfermo(Personaje)).
+
+cercanoEnfermo(Personaje):-
+    personaje(Personaje),
+    enfermo(Personaje).
+cercanoEnfermo(Personaje):-
