@@ -37,13 +37,13 @@ impactoEnRecompensa(hatchan, llegadaAEastBlue, 3000).
 %1
 %eventoCompartido(Tripulacion,OtraTripulacion,Evento).
 eventoCompartido(Tripulacion,OtraTripulacion,Evento):-
-    tripulante(Pirata, Tripulacion),
-    tripulante(OtroPirata, OtraTripulacion),
-    impactoEnRecompensa(Pirata, Evento, _),
-    impactoEnRecompensa(OtroPirata, Evento, _),
-    Evento \= llegadaAEastBlue,
+    participoEvento(Tripulacion,Evento),
+    participoEvento(OtraTripulacion,Evento),
      Tripulacion \= OtraTripulacion.
 
+participoEvento(Tripulacion,Evento):-
+ impactoEnRecompensa(Pirata, Evento, _),
+ tripulante(Pirata,Tripulacion).
 
 %2
 % pirataDestacado(Pirata,Evento).
@@ -83,7 +83,6 @@ Recompensa > 100000000.
 
 %6
 esPeligroso2(Tripulante):-
- tripulante(Tripulante,_),
  comio(Tripulante, Fruta),
  frutaPeligrosa(Fruta).
 
