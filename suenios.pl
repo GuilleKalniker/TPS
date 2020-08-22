@@ -81,4 +81,3 @@ personajePuedeAlegrar(Personaje,Persona):-
 cercanoEnfermo(Personaje):-
     personaje(Personaje),
     enfermo(Personaje).
-cercanoEnfermo(Personaje):-
