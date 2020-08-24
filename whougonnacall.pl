@@ -71,6 +71,7 @@ tareaCompleja(Tarea):-
     length(Herramientas,Cantidad),
     Cantidad > 2.
 
+% 6
 
 
-
+herramientasRequeridas2(limpiarBanio, [sopapa, trapeador]).
