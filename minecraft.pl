@@ -120,11 +120,17 @@ item(placaDeMadera, [itemSimple(madera, 1)]).
 item(palo, [ itemCompuesto(placaDeMadera)]).
 item(antorcha, [ itemCompuesto(palo), itemSimple(carbon, 1)]).
 
-materiaPrimaPara(Objeto,Materiales):-
-    item(Objeto, Materiales),
-    member(ItemComuesto,Materiales),
-    item(ItemComuesto)
+tieneMaterial(Jugador, itemSimple(Item, Cant)):-
+    cantidadDeItem(Jugador, Item, Cantidad),
+    Cantidad >= Cant.
 
+tieneMaterial(Jugador, itemCompuesto(Item)):-
+    puedeConstruir(Jugador, Item).
+
+puedeConstruir(Jugador, Item):-
+jugador(Jugador,_,_),
+    item(Item, ListaMateriales),
+    forall(member(Material, ListaMateriales), tieneMaterial(Jugador, Material)).
 
 %4
 /* 
